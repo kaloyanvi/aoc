@@ -6,7 +6,7 @@ with open('input.txt') as f:
 def better_linearSearch(txt_file):
     for line in txt_file:
         for nested_line in txt_file:
-            for more_nested in lines:
+            for more_nested in txt_file:
                 line_sum = int(line) + int(nested_line) + int(more_nested)
                 if line_sum == 2020:
                     solution = (int(line) * int(nested_line) * int(more_nested))
