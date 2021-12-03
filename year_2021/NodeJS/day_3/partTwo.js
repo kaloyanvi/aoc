@@ -1,13 +1,11 @@
 const fs = require("fs");
 
-function transposeMatrix(matrix) {
-  const mT = matrix[0].map((_, colIndex) => matrix.map((row) => row[colIndex]));
-  return mT;
-}
-
 function filterMatrixGenerator(matrix, depth = 0, filter) {
   if (matrix.length > 1) {
-    const mT = transposeMatrix(matrix);
+    // matrix transpose
+    const mT = matrix[0].map((_, colIndex) =>
+      matrix.map((row) => row[colIndex])
+    );
     let bitFilter;
     if (filter === "O2") {
       bitFilter =
