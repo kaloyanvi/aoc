@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-function filterMatrixGenerator(matrix, depth = 0, filter) {
+function filterMatrix(matrix, depth = 0, filter) {
   if (matrix.length > 1) {
     // matrix transpose
     const mT = matrix[0].map((_, colIndex) =>
@@ -22,7 +22,7 @@ function filterMatrixGenerator(matrix, depth = 0, filter) {
     }
 
     const matrixFiltered = matrix.filter((row) => row[depth] == bitFilter);
-    return filterMatrixGenerator(matrixFiltered, depth + 1, filter);
+    return filterMatrix(matrixFiltered, depth + 1, filter);
   }
 
   const bitString = parseInt(matrix[0].join(""), 2);
@@ -36,8 +36,8 @@ try {
   let matrix = [];
   lines.forEach((i) => matrix.push(i.split("")));
 
-  const O2 = filterMatrixGenerator(matrix, 0, "O2");
-  const CO2 = filterMatrixGenerator(matrix, 0, "CO2");
+  const O2 = filterMatrix(matrix, 0, "O2");
+  const CO2 = filterMatrix(matrix, 0, "CO2");
   const result = O2 * CO2;
   console.log(result);
 } catch (err) {
