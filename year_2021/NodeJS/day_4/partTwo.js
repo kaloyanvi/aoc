@@ -44,7 +44,7 @@ function findLastWinner(winnerBoards) {
   return firstWin;
 }
 
-function partOne(filePath) {
+function partTwo(filePath) {
   const data = fs.readFileSync(filePath, "UTF-8");
   const lines = data.split(/\r?\n/);
   const numbers = lines.shift().split(",");
@@ -78,4 +78,4 @@ function partOne(filePath) {
   return findLastWinner(winnerBoards);
 }
 
-console.log(partOne("./year_2021/NodeJS/day_4/input.txt"));
+console.log(partTwo("./year_2021/NodeJS/day_4/input.txt"));
