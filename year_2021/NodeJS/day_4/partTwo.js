@@ -34,6 +34,7 @@ function calculateScore(matrix, numbersDrawn) {
 }
 
 function findLastWinner(winnerBoards) {
+  console.log(winnerBoards);
   const allBoards = [...new Set(winnerBoards.map((i) => i.board))];
   const lastWinningBoard = allBoards[allBoards.length - 1];
 
@@ -78,4 +79,4 @@ function partTwo(filePath) {
   return findLastWinner(winnerBoards);
 }
 
-console.log(partTwo("./year_2021/NodeJS/day_4/input.txt"));
+console.log(partTwo("./year_2021/NodeJS/day_4/testInput.txt"));
