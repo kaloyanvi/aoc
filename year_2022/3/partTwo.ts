@@ -22,16 +22,15 @@ const findCharPriority = (char: string) => {
   return isUpperCase ? prio + alphabet.length : prio
 }
 
-const findPrioritiesSum = (input: string[]) => {
+const findGroupPrioritiesSum = (input: string[]) => {
   let sum = 0
-  input.forEach((item: string) => {
-    const firstHalf = item.slice(0, item.length / 2)
-    const secondHalf = item.slice(item.length / 2)
-
-    const commonChar = findCommonCharacters(firstHalf, secondHalf)[0]
-    sum += findCharPriority(commonChar)
-  })
+  for (let i = 0; i < input.length; i=i+3) {
+    const currentGroup = input.slice(i, i+3)
+    const prelimCommon = findCommonCharacters(currentGroup[0], currentGroup[1])
+    const badge = findCommonCharacters(prelimCommon.join(''), currentGroup[2])[0]
+    sum += findCharPriority(badge)
+  }
   console.log('Sum of priorities:', sum)
 }
 
-findPrioritiesSum(input)
+findGroupPrioritiesSum(input)
