@@ -1,9 +1,6 @@
-import * as fs from 'fs'
-import * as path from 'path'
+import { loadFile } from '../../loadFile'
 
-const filePath = path.join(__dirname, 'input.txt')
-const input = fs.readFileSync(filePath, { encoding: 'utf-8' }).split('\n')
-
+const input = loadFile('/year_2022/3/input.txt').split('\n')
 const findCommonCharacters = (firstHalf: string, secondHalf: string) => {
   const commonChars = []
   firstHalf.split('').forEach((char) => {

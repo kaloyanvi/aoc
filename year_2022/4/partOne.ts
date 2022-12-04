@@ -1,9 +1,6 @@
-import * as fs from 'fs'
-import * as path from 'path'
+import { loadFile } from '../../loadFile'
 
-const filePath = path.join(__dirname, 'input.txt')
-const input = fs.readFileSync(filePath, { encoding: 'utf-8' }).split('\n')
-
+const input = loadFile('/year_2022/4/input.txt').split('\n')
 const getRangeFromString = (str: string) => {
   const [min, max] = str.split('-').map((item) => parseInt(item))
   return [min, max]
