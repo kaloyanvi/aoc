@@ -21,7 +21,7 @@ const parseInstructions = (instructions: string) => {
 }
 
 const parseStartingGrid = (startingGrid: string) => {
-  const cols = 9
+  const cols = 9 // TODO: make this dynamic
   const gridLines = startingGrid.split('\n')
   gridLines.splice(-1)
 
