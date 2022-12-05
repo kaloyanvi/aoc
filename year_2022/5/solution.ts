@@ -45,7 +45,20 @@ const partOne = () => {
     parsedGrid[to].push(...cratesToMove.reverse())
   })
   const solution = parsedGrid.map((stack) => stack[stack.length -1]).join('')
-  console.log('Solution: ', solution)
+  console.log('Solution part 1: ', solution)
+}
+
+const partTwo = () => {
+  const parsedInstructions = parseInstructions(instructions)
+  const parsedGrid = parseStartingGrid(startingGrid)
+  parsedInstructions.forEach((instruction) => {
+    const { crates, from, to } = instruction
+    const cratesToMove = parsedGrid[from].splice(-crates)
+    parsedGrid[to].push(...cratesToMove)
+  })
+  const solution = parsedGrid.map((stack) => stack[stack.length -1]).join('')
+  console.log('Solution part 2: ', solution)
 }
 
 partOne()
+partTwo()
