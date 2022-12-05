@@ -9,9 +9,8 @@ interface Instruction {
   to: number
 }
 const parseInstructions = (instructions: string) => {
-  const instructionsArray = instructions.split('\n')
   const parsedInstructions: Instruction[] = []
-  instructionsArray.forEach((instruction) => {
+  instructions.split('\n').forEach((instruction) => {
     const instuctionNums = instruction.split(/[^0-9]+/)
     instuctionNums.shift()
     const [crates, from, to] = instuctionNums.map((item) => parseInt(item))
@@ -21,7 +20,7 @@ const parseInstructions = (instructions: string) => {
 }
 
 const parseStartingGrid = (startingGrid: string) => {
-  const cols = 9 // TODO: make this dynamic
+  const cols = parseInt(startingGrid[startingGrid.length - 2])
   const gridLines = startingGrid.split('\n')
   gridLines.splice(-1)
 
@@ -36,29 +35,20 @@ const parseStartingGrid = (startingGrid: string) => {
   return stacks.map((stack) => stack.reverse())
 }
 
-const partOne = () => {
-  const parsedInstructions = parseInstructions(instructions)
-  const parsedGrid = parseStartingGrid(startingGrid)
-  parsedInstructions.forEach((instruction) => {
-    const { crates, from, to } = instruction
-    const cratesToMove = parsedGrid[from].splice(-crates)
-    parsedGrid[to].push(...cratesToMove.reverse())
+const solution = () => {
+  const parsedGridOne = parseStartingGrid(startingGrid)
+  const parsedGridTwo = parseStartingGrid(startingGrid)
+
+  parseInstructions(instructions).forEach((i) => {
+    const cratesToMoveOne = parsedGridOne[i.from].splice(-i.crates)
+    parsedGridOne[i.to].push(...cratesToMoveOne.reverse())
+    const cratesToMoveTwo = parsedGridTwo[i.from].splice(-i.crates)
+    parsedGridTwo[i.to].push(...cratesToMoveTwo)
   })
-  const solution = parsedGrid.map((stack) => stack[stack.length -1]).join('')
-  console.log('Solution part 1: ', solution)
+  const partOne = parsedGridOne.map((stack) => stack[stack.length -1]).join('')
+  const partTwo = parsedGridTwo.map((stack) => stack[stack.length -1]).join('')
+  console.log('Solution part 1: ', partOne)
+  console.log('Solution part 2: ', partTwo)
 }
 
-const partTwo = () => {
-  const parsedInstructions = parseInstructions(instructions)
-  const parsedGrid = parseStartingGrid(startingGrid)
-  parsedInstructions.forEach((instruction) => {
-    const { crates, from, to } = instruction
-    const cratesToMove = parsedGrid[from].splice(-crates)
-    parsedGrid[to].push(...cratesToMove)
-  })
-  const solution = parsedGrid.map((stack) => stack[stack.length -1]).join('')
-  console.log('Solution part 2: ', solution)
-}
-
-partOne()
-partTwo()
+solution()
