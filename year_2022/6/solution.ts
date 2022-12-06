@@ -10,18 +10,15 @@ const arrayIsUnique = (str: string) => {
 
 const findMarkerIndex = (input: string, markerSize: number) => {
   for (let i = 0; i < input.length; i++) {
-    const currentString = input.slice(0, i)
-    const lastFour = currentString.slice(-markerSize)
+    const lastFour = input.slice(0, i).slice(-markerSize)
     const uniqueLastFour = arrayIsUnique(lastFour)
     if (uniqueLastFour && lastFour.length === markerSize) return i
   }
 }
 
 const solution = (input: string) => {
-  const packetMarker = findMarkerIndex(input, 4)
-  const messageMarker = findMarkerIndex(input, 14)
-  console.log('Packet marker:', packetMarker)
-  console.log('Message marker:', messageMarker)
+  console.log('Packet marker:', findMarkerIndex(input, 4))
+  console.log('Message marker:', findMarkerIndex(input, 14))
 }
 
 solution(input)
