@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "sourceMap": true,
     "outDir": "out",
+    "lib": [
+      "ES2021.String"
+    ]
   },
   "files.exclude": {
     "**/.git": true,
