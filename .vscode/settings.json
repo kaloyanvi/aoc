@@ -1,3 +1,5 @@
 {
-    "jupyter.textOutputLimit": 200000
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2
 }
