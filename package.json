@@ -1,0 +1,16 @@
+{
+  "name": "aoc",
+  "version": "1.0.0",
+  "description": "Advent of code solutions",
+  "repository": "https://github.com/kvidelov/aoc.git",
+  "author": "Kaloyan Videlov <kvidelov@protonmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@types/node": "18.11.10",
+    "fs": "^0.0.1-security",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  }
+}

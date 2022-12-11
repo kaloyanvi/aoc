@@ -1,0 +1,12 @@
+name: aoc
+
+up:
+
+- node: 18.2.0
+- npm:
+  - yarn
+- run: yarn install
+
+down:
+
+- run: rm -r node_modules
