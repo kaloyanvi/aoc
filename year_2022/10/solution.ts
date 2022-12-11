@@ -9,13 +9,10 @@ const cpuCycle = (cmdIndex, currentCycle, commands, X, mod: Modifier, recs: numb
   const measureCycles = [20, 60, 100, 140, 180, 220]
   if (cmdIndex >= commands.length) {
     const sum = recs.reduce((a, b) => a + b, 0)
-    image.forEach((row) => {
-      console.log(row.join(''))
-    })
+    image.forEach((row) => console.log(row.join('')))
     return sum
   }
-  
-  const signalStrength = X * currentCycle
+
   const [currentCmd, modifier] = commands[cmdIndex].split(' ')
   
   if (measureCycles.includes(currentCycle)) recs.push(X * currentCycle)
