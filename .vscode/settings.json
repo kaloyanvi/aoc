@@ -1,5 +1,16 @@
 {
+  "files.exclude": {
+    "**/tsconfig.tsbuildinfo": true,
+    ".shadowenv.d": true,
+    "node_modules": true,
+    "main": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.insertSpaces": true,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "eslint.validate": ["typescript"],
 }
