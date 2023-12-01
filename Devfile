@@ -2,12 +2,8 @@ name: aoc
 version: 1
 
 up:
-
-- node: 18.2.0
-- npm:
-  - yarn
-- run: yarn install
+  - node: 18.14.1
+  - run: yarn install
 
 down:
-
-- run: rm -r node_modules
+  - run: rm -r node_modules
