@@ -10,8 +10,15 @@ Setup env in repo's root directory:
 dev up
 ```
 
-Example running TS files:
+You can automatically start on a new problem by running the command:
 
 ```
-nodemon year_2022/10/solution.ts
+make create YEAR=23 DAY=2
 ```
+
+This will:
+
+- create a directory for the provided day
+- create two files; `solution.ts` and `input.txt`
+- open the files in VS code
+- start the solution script in watch mode waiting for changes
