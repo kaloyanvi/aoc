@@ -8,23 +8,17 @@ const getWinningWays = (raceDuration: number, recordDistance: number) => {
   for (let btnHold = 1; btnHold <= raceDuration; btnHold++) {
     const remainingRaceDuration = raceDuration - btnHold
     const canTravelDistance = btnHold * remainingRaceDuration
-    if (canTravelDistance > recordDistance) {
-      winningWays++
-    }
+    if (canTravelDistance > recordDistance) winningWays++
   }
   return winningWays
 }
 
 /*------------------------------ Part 1 ------------------------------*/
 
-const parseInputPartOne = (lines: string[]) => {
-  const t = lines[0].replace('Time:', '').trim().split(/[ ]+/).map(Number)
-  const d = lines[1].replace('Distance:', '').trim().split(/[ ]+/).map(Number)
-  return [t, d]
-}
-
+const parse = (str: string) => str.trim().split(/[ ]+/).map(Number)
 function solutionPartOne(lines) {
-  const [durations, records] = parseInputPartOne(lines)
+  const durations = parse(lines[0].replace(/Time:/, ''))
+  const records = parse(lines[1].replace(/Distance:/, ''))
   const winningWaysPerRace = durations.map((duration, index) =>
     getWinningWays(duration, records[index])
   )

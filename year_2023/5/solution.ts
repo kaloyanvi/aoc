@@ -1,17 +1,12 @@
 import { loadFile } from '../../loadFile'
 
-// const input = loadFile('year_2023/5/testInput.txt')
 const input = loadFile('year_2023/5/input.txt')
 const lines = input.split('\n\n')
 
 const parseMap = (mapRows: string[]) => {
-  // console.log('\n\nparsing map: ')
   mapRows.shift() // remove the map name
   const row = mapRows.map((line) => line.split(' ').map(Number))
-  const sortedRow = row.sort((a, b) => a[1] - b[1])
-  // console.log('sortedRow: ', sortedRow)
-  return sortedRow
-  // return row
+  return row.sort((a, b) => a[1] - b[1])
 }
 
 const parseInput = (lines: string[]) => {
@@ -38,23 +33,6 @@ const parseInput = (lines: string[]) => {
   }
 }
 
-// const translate = (value: number, mapValues: number[][]) => {
-//   // console.log('\n\nmaking translation for value: ', value)
-//   for (const mapValue of mapValues) {
-//     // console.log('mapValue: ', mapValue)
-//     const [destinationStart, sourceStart, range] = mapValue
-//     if (value < sourceStart || value > sourceStart + range) {
-//       continue
-//     }
-//     if (sourceStart <= value && value <= sourceStart + range) {
-//       // console.log('Found translation')
-//       const diff = sourceStart - destinationStart
-//       return value - diff
-//     }
-//   }
-//   return value
-// }
-
 const binarySearch = (arr: number[][], value: number) => {
   let start = 0
   let end = arr.length - 1
@@ -77,8 +55,6 @@ const binarySearch = (arr: number[][], value: number) => {
 
 const translate = (value: number, mapValues: number[][]) => {
   const mapValue = binarySearch(mapValues, value)
-  // console.log('mapped value:', mapValue)
-
   if (mapValue) {
     const [destinationStart, sourceStart, _] = mapValue
     const diff = sourceStart - destinationStart
@@ -89,21 +65,13 @@ const translate = (value: number, mapValues: number[][]) => {
 }
 
 const translateSeedToLocation = (seed: number, maps) => {
-  // console.log('\nTranslating seed to location: ', seed)
   const soil = translate(seed, maps.seedToSoil)
-  // console.log('Soil: ', soil)
   const fertilizer = translate(soil, maps.soilToFertilizer)
-  // console.log('Fertilizer: ', fertilizer)
   const water = translate(fertilizer, maps.fertilizerToWater)
-  // console.log('Water: ', water)
   const light = translate(water, maps.waterToLight)
-  // console.log('Light: ', light)
   const temperature = translate(light, maps.lightToTemperature)
-  // console.log('Temperature: ', temperature)
   const humidity = translate(temperature, maps.temperatureToHumidity)
-  // console.log('Humidity: ', humidity)
   const location = translate(humidity, maps.humidityToLocation)
-  // console.log('Location: ', location)
   return location
 }
 
@@ -111,7 +79,6 @@ const translateSeedToLocation = (seed: number, maps) => {
 
 function solutionPartOne(lines) {
   const maps = parseInput(lines)
-  console.log('maps: ', maps)
   const seedsLocations = maps.seeds.map((seed) => {
     return translateSeedToLocation(seed, maps)
   })
@@ -119,7 +86,7 @@ function solutionPartOne(lines) {
   console.log('Solution part 1: ', minLocation)
 }
 
-// solutionPartOne(lines)
+solutionPartOne(lines)
 
 /*------------------------------ Part 2 ------------------------------*/
 
@@ -132,20 +99,15 @@ const getSeedsPairs = (initialSeeds: number[]) => {
 
 function solutionPartTwo(lines) {
   const maps = parseInput(lines)
-  // console.log('maps: ', maps)
   const seedsPairs = getSeedsPairs(maps.seeds)
 
   let minLocation = translateSeedToLocation(seedsPairs[0][0], maps)
   seedsPairs.forEach((seedsPair, index) => {
     console.log(`\n\nCompleted: ${index + 1} / ${seedsPairs.length}`)
     const [start, range] = seedsPair
-    // console.log('seeds pair: ', [start, range])
     for (let i = start; i < start + range; i++) {
       const location = translateSeedToLocation(i, maps)
-      if (location < minLocation) {
-        // console.log('Setting min location to: ', location)
-        minLocation = location
-      }
+      if (location < minLocation) minLocation = location
     }
   })
   console.log('Solution part 2: ', minLocation)
