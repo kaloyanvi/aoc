@@ -3,12 +3,6 @@ import { loadFile } from '../../loadFile'
 const input = loadFile('year_2023/6/input.txt')
 const lines = input.split('\n')
 
-const parseInput = (lines: string[]) => {
-  const t = lines[0].replace('Time:', '').trim().split(/[ ]+/).map(Number)
-  const d = lines[1].replace('Distance:', '').trim().split(/[ ]+/).map(Number)
-  return [t, d]
-}
-
 const getWinningWays = (raceDuration: number, recordDistance: number) => {
   let winningWays = 0
   for (let btnHold = 1; btnHold <= raceDuration; btnHold++) {
@@ -23,8 +17,14 @@ const getWinningWays = (raceDuration: number, recordDistance: number) => {
 
 /*------------------------------ Part 1 ------------------------------*/
 
+const parseInputPartOne = (lines: string[]) => {
+  const t = lines[0].replace('Time:', '').trim().split(/[ ]+/).map(Number)
+  const d = lines[1].replace('Distance:', '').trim().split(/[ ]+/).map(Number)
+  return [t, d]
+}
+
 function solutionPartOne(lines) {
-  const [durations, records] = parseInput(lines)
+  const [durations, records] = parseInputPartOne(lines)
   const winningWaysPerRace = durations.map((duration, index) =>
     getWinningWays(duration, records[index])
   )
