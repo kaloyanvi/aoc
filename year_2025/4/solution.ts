@@ -1,56 +1,38 @@
 import { loadFile } from '../../loadFile'
+import {
+  Direction,
+  directions,
+  Point,
+  pointIsInBounds,
+  traverseMatrix,
+} from '../../utils/matrix'
 
 const input = loadFile('year_2025/4/input.txt')
 const lines = input.split('\n')
 
-type Direction =
-  | 'up'
-  | 'down'
-  | 'left'
-  | 'right'
-  | 'up-left'
-  | 'up-right'
-  | 'down-left'
-  | 'down-right'
-
-const pattern = ['X', 'M', 'A', 'S']
-
-const directions: Direction[] = [
-  'up',
-  'down',
-  'left',
-  'right',
-  'up-left',
-  'up-right',
-  'down-left',
-  'down-right',
-]
-
-interface Point {
-  x: number
-  y: number
-}
+/*------------------------------ Part 1 ------------------------------*/
 
 function solutionPartOne(lines: string[]) {
   const matrix = lines.map((line) => line.split(''))
-  let patternCount = 0
+  let count = 0
+  traverseMatrix(matrix, (point, value) => {
+    if (value !== 'X') return undefined
 
-  for (let y = 0; y < matrix.length; y++) {
-    for (let x = 0; x < matrix[0].length; x++) {
-      if (matrix[y][x] === 'X') {
-        for (const direction of directions) {
-          if (checkPattern(matrix, { x, y }, direction, pattern, 0)) {
-            patternCount++
-          }
-        }
+    for (const direction of Object.keys(directions) as Direction[]) {
+      if (
+        hasValidXmasPattern(matrix, point, direction, ['X', 'M', 'A', 'S'], 0)
+      ) {
+        count++
       }
     }
-  }
+  })
 
-  return patternCount
+  return count
 }
 
-function checkPattern(
+console.log('Solution part 1:', solutionPartOne(lines))
+
+function hasValidXmasPattern(
   matrix: string[][],
   point: Point,
   direction: Direction,
@@ -59,55 +41,57 @@ function checkPattern(
 ): boolean {
   if (!pointIsInBounds(point, matrix)) return false
   if (matrix[point.y][point.x] !== pattern[index]) return false
-
   if (index === pattern.length - 1) return true
 
-  const nextPoint = getNextPoint(point, direction)
-  return checkPattern(matrix, nextPoint, direction, pattern, index + 1)
-}
-
-function pointIsInBounds(point: Point, matrix: string[][]): boolean {
-  return (
-    point.x >= 0 &&
-    point.x < matrix[0].length &&
-    point.y >= 0 &&
-    point.y < matrix.length
+  const [dx, dy] = directions[direction]
+  return hasValidXmasPattern(
+    matrix,
+    { x: point.x + dx, y: point.y + dy },
+    direction,
+    pattern,
+    index + 1
   )
 }
 
-function getNextPoint(point: Point, direction: Direction): Point {
-  const nextPoint = { ...point }
-  switch (direction) {
-    case 'up':
-      nextPoint.y--
-      break
-    case 'down':
-      nextPoint.y++
-      break
-    case 'left':
-      nextPoint.x--
-      break
-    case 'right':
-      nextPoint.x++
-      break
-    case 'up-left':
-      nextPoint.y--
-      nextPoint.x--
-      break
-    case 'up-right':
-      nextPoint.y--
-      nextPoint.x++
-      break
-    case 'down-left':
-      nextPoint.y++
-      nextPoint.x--
-      break
-    case 'down-right':
-      nextPoint.y++
-      nextPoint.x++
-      break
-  }
-  return nextPoint
+/*------------------------------ Part 2 ------------------------------*/
+
+function solutionPartTwo(lines: string[]) {
+  const matrix = lines.map((line) => line.split(''))
+  let xMasCount = 0
+
+  traverseMatrix(matrix, (point, value) => {
+    if (value !== 'A') return
+    if (!hasValidXPattern(matrix, point)) return
+    xMasCount++
+  })
+
+  return xMasCount
 }
 
-console.log('Solution part 1:', solutionPartOne(lines))
+console.log('Solution part 2:', solutionPartTwo(lines))
+
+function hasValidXPattern(matrix: string[][], center: Point): boolean {
+  const points = {
+    upperLeft: { x: center.x - 1, y: center.y - 1 },
+    upperRight: { x: center.x + 1, y: center.y - 1 },
+    lowerLeft: { x: center.x - 1, y: center.y + 1 },
+    lowerRight: { x: center.x + 1, y: center.y + 1 },
+  }
+
+  const values = Object.fromEntries(
+    Object.entries(points).map(([key, point]) => [
+      key,
+      pointIsInBounds(point, matrix) ? matrix[point.y][point.x] : null,
+    ])
+  )
+
+  const diagonal1Valid =
+    (values.upperLeft === 'M' && values.lowerRight === 'S') ||
+    (values.upperLeft === 'S' && values.lowerRight === 'M')
+
+  const diagonal2Valid =
+    (values.upperRight === 'M' && values.lowerLeft === 'S') ||
+    (values.upperRight === 'S' && values.lowerLeft === 'M')
+
+  return diagonal1Valid && diagonal2Valid
+}
