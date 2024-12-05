@@ -1,6 +1,6 @@
 import { loadFile } from '../../loadFile'
 
-const input = loadFile('year_2025/5/input.txt')
+const input = loadFile('year_2024/5/input.txt')
 
 type Graph = Map<number, Set<number>>
 

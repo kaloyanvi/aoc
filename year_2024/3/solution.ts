@@ -1,6 +1,6 @@
 import { loadFile } from '../../loadFile'
 
-const input = loadFile('year_2025/3/input.txt')
+const input = loadFile('year_2024/3/input.txt')
 const lines = input.split('\n')
 
 /*------------------------------ Part 1 ------------------------------*/

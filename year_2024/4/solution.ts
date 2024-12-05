@@ -7,7 +7,7 @@ import {
   traverseMatrix,
 } from '../../utils/matrix'
 
-const input = loadFile('year_2025/4/input.txt')
+const input = loadFile('year_2024/4/input.txt')
 const lines = input.split('\n')
 
 /*------------------------------ Part 1 ------------------------------*/
