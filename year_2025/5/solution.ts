@@ -2,71 +2,118 @@ import { loadFile } from '../../loadFile'
 
 const input = loadFile('year_2025/5/input.txt')
 
-/*------------------------------ Part 1 ------------------------------*/
+type Graph = Map<number, Set<number>>
 
-function solutionPartOne(input) {
-  const [rules, pagesRows] = input
-    .split(/\n\s*\n/)
-    .map((part) => part.split('\n'))
+function buildGraph(rules: string[]): Graph {
+  const graph: Graph = new Map()
 
-  const rulesMap = new Map<number, number[]>()
   for (const rule of rules) {
-    const [key, value] = rule.split('|').map((part) => parseInt(part))
-    if (rulesMap.has(key)) {
-      rulesMap.set(key, [...rulesMap.get(key), value])
-      continue
-    }
-    rulesMap.set(key, [value])
+    if (!rule) continue
+    const [before, after] = rule.split('|').map(Number)
+
+    if (!graph.has(before)) graph.set(before, new Set())
+    if (!graph.has(after)) graph.set(after, new Set())
+
+    graph.get(after)!.add(before)
   }
 
-  let sum = 0
-  for (const row of pagesRows) {
-    const pages: number[] = row.split(',').map((part) => parseInt(part))
-    if (pagesAreSortedCorrectly(pages, rulesMap)) {
-      sum += getMiddleItem(pages)
-    }
-  }
-
-  console.log('Solution part 1:', sum)
+  return graph
 }
 
-solutionPartOne(input)
+function isValidOrder(pages: number[], graph: Graph): boolean {
+  const seen = new Set<number>()
 
-function pagesAreSortedCorrectly(
-  pages: number[],
-  rulesMap: Map<number, number[]>
-) {
-  const visitedPages = []
   for (const page of pages) {
-    const rules = rulesMap.get(page)
-    if (rules === undefined) {
-      visitedPages.push(page)
-      continue
-    }
+    if (!seen.has(page)) {
+      const requirements = graph.get(page)
+      if (!requirements) continue
 
-    // if the rule is in the visited page, then its not sorted correctly
-    if (visitedPages.some((page) => rules.includes(page))) {
-      return false
+      // Check if all required pages before this one have been seen
+      for (const req of requirements) {
+        if (pages.includes(req) && !seen.has(req)) {
+          return false
+        }
+      }
     }
-
-    visitedPages.push(page)
+    seen.add(page)
   }
+
   return true
 }
 
-function getMiddleItem<T>(arr: T[]): T {
-  if (arr.length === 0) {
-    throw new Error('Cannot get middle item of empty array')
+function topologicalSort(pages: number[], graph: Graph): number[] {
+  const result: number[] = []
+  const visited = new Set<number>()
+  const temp = new Set<number>()
+
+  function visit(page: number) {
+    if (temp.has(page)) return // Skip if in temporary set (cycle detection)
+    if (visited.has(page)) return // Skip if already visited
+
+    temp.add(page)
+
+    // Visit all dependencies
+    const requirements = graph.get(page)
+    if (requirements) {
+      for (const req of requirements) {
+        if (pages.includes(req)) {
+          visit(req)
+        }
+      }
+    }
+
+    temp.delete(page)
+    visited.add(page)
+    result.unshift(page)
   }
 
-  const middleIndex = Math.floor((arr.length - 1) / 2)
-  return arr[middleIndex]
+  for (const page of pages) {
+    if (!visited.has(page)) {
+      visit(page)
+    }
+  }
+
+  return result
 }
 
-/*------------------------------ Part 2 ------------------------------*/
+// Split input into rules and updates
+const [rulesSection, updatesSection] = input.split('\n\n')
+const rules = rulesSection.split('\n')
+const updates = updatesSection
+  .split('\n')
+  .filter((line) => line.length > 0)
+  .map((update) => update.split(',').map(Number))
 
-function solutionPartTwo(lines) {
-  console.log('Solution part 2: ')
+const graph = buildGraph(rules)
+
+function solutionPartOne(graph: Graph, updates: number[][]): number[][] {
+  let sumValidMiddles = 0
+  const invalidUpdates: number[][] = []
+
+  for (const update of updates) {
+    if (isValidOrder(update, graph)) {
+      const middleIndex = Math.floor(update.length / 2)
+      sumValidMiddles += update[middleIndex]
+    } else {
+      invalidUpdates.push(update)
+    }
+  }
+  console.log('Part 1:', sumValidMiddles)
+  return invalidUpdates
 }
 
-solutionPartTwo(input)
+solutionPartOne(graph, updates)
+
+function solutionPartTwo(graph: Graph, updates: number[][]) {
+  const invalidUpdates: number[][] = solutionPartOne(graph, updates)
+  let sumInvalidMiddles = 0
+
+  for (const update of invalidUpdates) {
+    const sortedUpdate = topologicalSort(update, graph)
+    const middleIndex = Math.floor(sortedUpdate.length / 2)
+    sumInvalidMiddles += sortedUpdate[middleIndex]
+  }
+  console.log('Part 2:', sumInvalidMiddles)
+}
+
+solutionPartTwo(graph, updates)
